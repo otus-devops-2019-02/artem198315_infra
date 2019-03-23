@@ -6,6 +6,62 @@ artem198315 Infra repository
 
 ## Описание конфигурации
 
+Хост 1:
+Бастион хост с статическим внешним ip и внутренним ип.
+Хост 2:
+Хост с внутренним ип.
+
+На хосте1 крутится vpn (pritunl)
+С хоста1 есть доступ до хоста2.
+
+Команды для gcloud
+
+gcloud compute addresses create bastion-ext \
+--region=europe-west3    \
+--network-tier=STANDARD
+
+gcloud compute instances create bastion2 \
+--hostname=bastion.local \
+--zone=europe-west3-c \
+--boot-disk-size=10Gb \
+--image-family ubuntu-1604-lts \
+--image-project=ubuntu-os-cloud \
+--machine-type=f1-micro \
+--restart-on-failure \
+--address=bastion-ext \
+--network-tier=STANDARD \
+--preemptible \
+--tags=allow-http,allow-https,allow-pritunl \
+--metadata=startup-script='#!/bin/bash
+echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse" > /etc/apt/sources.list.d/mongodb-org-3.4.list
+echo "deb http://repo.pritunl.com/stable/apt xenial main" > /etc/apt/sources.list.d/pritunl.list
+apt-key adv --keyserver hkp://keyserver.ubuntu.com --recv 0C49F3730359A14518585931BC711F9BA15703C6
+apt-key adv --keyserver hkp://keyserver.ubuntu.com --recv 7568D9BB55FF9E5287D586017AE645C0CF8E292A
+apt-get --assume-yes update
+apt-get --assume-yes upgrade
+apt-get --assume-yes install pritunl mongodb-org
+systemctl start pritunl mongod
+systemctl enable pritunl mongod
+'
+
+gcloud compute instances create someinternalhost \
+--hostname=internal.local \
+--zone=europe-west3-c \
+--boot-disk-size=10Gb \
+--image-family ubuntu-1604-lts \
+--machine-type=f1-micro \
+--restart-on-failure \
+--network-tier=STANDARD \
+--preemptible \
+--image-family ubuntu-1604-lts \
+--image-project=ubuntu-os-cloud
+
+
+gcloud compute firewall-rules create \
+allow-pritunl --allow=udp:12510 --direction=ingress \
+--source-ranges=0.0.0.0/0 --targer-tags=allow-pritunl
+
+
 ### Подключение к internal хосту через jumphost(cloud-bastion) в одну команду
 
 ```
