@@ -59,7 +59,7 @@ gcloud compute instances create someinternalhost \
 
 gcloud compute firewall-rules create \
 allow-pritunl --allow=udp:12510 --direction=ingress \
---source-ranges=0.0.0.0/0 --targer-tags=allow-pritunl
+--source-ranges=0.0.0.0/0 --target-tags=allow-pritunl
 
 
 ### Подключение к internal хосту через jumphost(cloud-bastion) в одну команду
@@ -97,3 +97,50 @@ bastion_IP = 35.207.180.229
 someinternalhost_IP = 10.156.0.3
 ```
 
+
+# Домашнее задание 4
+
+## Описание конфигурации
+
+Скрипт install_ruby.sh содержит команды по установке Ruby;
+Скрипт install_mongodb.sh содержит  команды по установке MongoDB;
+Скрипт deploy.sh содержит  команды скачивания кода,установки зависимостей через bundler и запуск приложения
+Скрипт startup.sh это композиция всех вышеперечисленных скриптов. Используется как startup-script при разворачивании ноды
+
+
+Создаем адрес, машину и фаерволл для деплоя в облаке
+```
+gcloud compute addresses create reddit-ip \
+--region=europe-west3    \
+--network-tier=STANDARD \
+&&
+gcloud compute instances create reddit-app \
+--boot-disk-size=10GB \
+--image-family ubuntu-1604-lts \
+--image-project=ubuntu-os-cloud \
+--machine-type=g1-small \
+--tags puma-server \
+--restart-on-failure \
+--zone="europe-west3-c" \
+--address=reddit-ip \
+--network-tier=STANDARD \
+--preemptible \
+--metadata-from-file startup-script=startup.sh \
+&&
+gcloud compute firewall-rules create \
+default-puma-server --allow=tcp:9292 --direction=ingress \
+--source-ranges=0.0.0.0/0 --target-tags=puma-server
+```
+
+Вот так Удаляем все добро, когда не нужно
+```
+gcloud compute instances delete reddit-app && \
+gcloud compute addresses delete reddit-ip  && \
+gcloud compute firewall-rules delete default-puma-server
+```
+
+Автоматическое тестирование cloud-app
+```
+testapp_IP = 35.207.87.238
+testapp_port = 9292
+```
