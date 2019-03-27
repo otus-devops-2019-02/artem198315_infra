@@ -141,6 +141,6 @@ gcloud compute firewall-rules delete default-puma-server
 
 Автоматическое тестирование cloud-app
 ```
-testapp_IP = 35.207.87.238
+testapp_IP = 35.207.176.89
 testapp_port = 9292
 ```
