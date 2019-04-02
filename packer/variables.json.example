@@ -1,5 +1,5 @@
 {
-  "project_id": "infra-10"
+  "project_id": "infra-10",
   "family": "base",
   "image": "ubuntu-1604-lts",
   "zone": "europe-west2-b",
