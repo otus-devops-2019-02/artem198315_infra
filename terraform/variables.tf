@@ -5,7 +5,7 @@ variable project {
 
 variable region {
   type    = "string"
-  default = "europe-west3-c"
+  default = "europe-west3"
 }
 
 variable zone {
@@ -23,4 +23,9 @@ variable public_key_path {
 
 variable private_key_path {
   type = "string"
+}
+
+variable reddit_count {
+  type = "string"
+  default = "1"
 }

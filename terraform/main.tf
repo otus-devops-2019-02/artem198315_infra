@@ -14,7 +14,8 @@ resource "google_compute_project_metadata_item" "ssh-keys" {
 }
 
 resource "google_compute_instance" "reddit" {
-  name         = "reddit"
+  count = "${var.reddit_count}"
+  name         = "reddit-${count.index}"
   machine_type = "g1-small"
   zone         = "${var.zone}"
 
@@ -32,6 +33,11 @@ resource "google_compute_instance" "reddit" {
     access_config {
       // Ephemeral IP
     }
+  }
+
+  scheduling {
+    preemptible = true
+    automatic_restart = false
   }
 
   connection {
