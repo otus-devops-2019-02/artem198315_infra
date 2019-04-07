@@ -1,0 +1,9 @@
+{
+  "project_id": "infra-10",
+  "family": "base",
+  "image": "ubuntu-1604-lts",
+  "zone": "europe-west2-b",
+  "machine_type": "f1-micro",
+  "ssh_username": "username"
+}
+

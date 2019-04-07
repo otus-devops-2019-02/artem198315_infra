@@ -144,3 +144,37 @@ gcloud compute firewall-rules delete default-puma-server
 testapp_IP = 35.207.176.89
 testapp_port = 9292
 ```
+
+
+# Домашнее задание 5
+
+## Описание конфигурации
+
+Созданы два конфига для создания образов:
+
+ - ubuntu16.json
+ - immutable.json
+
+**ubuntu16.json** содержит в себе предустановленный руби и монго. Reddit накатывается через startup_script_file
+Переменные должны быть записаны в файл variables.json
+```
+Проверка на валидность конфига:
+/usr/bin/packer validate -var-file=variables.json ubuntu16.json
+
+Запуск билда:
+/usr/bin/packer build -var-file=variables.json ubuntu16.json
+```
+
+**immutable.json** содержит конфиг для baked образа в reddit app.
+В папке packer/files лежит unit для systemd для запуска reddit app при старте сервера, который будет создаваться из образа
+```
+Проверка:
+/usr/bin/packer validate -var project_id="infra-xxx" -var ssh_username="user" -var tags="puma-server" immutable.json
+
+Билд:
+/usr/bin/packer validate -var project_id="infra-xxx" -var ssh_username="user" -var tags="puma-server" immutable.json
+```
+
+**config-scripts/create-reddit-vm.sh**
+Скрипт для создания вм в gcc из full образа
+
