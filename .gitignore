@@ -1,2 +1,10 @@
 packer/variables.json
 packer/validate.*
+packer/variables.json
+packer/validate.*
+*.tfstate
+*.tfstate.*.backup
+*.tfstate.backup
+*.tfvars
+.terraform/
+

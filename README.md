@@ -178,3 +178,31 @@ testapp_port = 9292
 **config-scripts/create-reddit-vm.sh**
 Скрипт для создания вм в gcc из full образа
 
+
+# Домашнее задание 6
+
+## Описание конфигурации
+
+Используем terraform для разворачивания инфраструктуры в gcc:
+Создаем файервол, несколько vm с reddit-app, ssh ключи для проекта, L4 лоадбалансер.
+
+В папке terraform/files лежат скрипт для деплоя deploy.sh и systemd unit файл puma.service
+
+
+Используем базовый образ reddit-base для создания vm и provisioner'ы для деплоя приложения reddit и установки systemd юнита для него.
+
+Для добавления ssh ключей на уровне проекта gcc используем следующий ресурс:
+
+```
+resource "google_compute_project_metadata_item" "ssh-keys" {
+  key = "ssh-keys"
+  value = "shinta:${file("${var.public_key_path}")}appuser1:${file("${var.public_key_path}")}appuser2:${file("${var.public_key_path}")}"
+}
+```
+
+При пересоздании ресурса будут заменены все метаданные с указанным ключом в проекте,
+поэтому добавление ключa appuser-web через веб интерфейс и последующий запуск terraform apply удалит ключ appuser-web из проекта.
+
+
+Т.к используем лоадбалансер и каждый из инстансов reddit-app имеет свою собственную БД, то данные между инстансами не будут консистентны. Это следует учитывать
+
