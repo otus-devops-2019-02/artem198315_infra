@@ -29,8 +29,11 @@ echo "Step 2. Install mongo"
 sudo apt update && sudo apt install -y mongodb-org 
 check_err $?
 
+echo "Step 3. Copy mongo config"
+sudo cp /tmp/mongod.conf /etc/mongod.conf
+check_err $?
 
-echo "Step 3. Start mongodb"
+echo "Step 4. Start mongodb"
 sudo systemctl start mongod && sudo systemctl enable mongod
 check_err $?
 
