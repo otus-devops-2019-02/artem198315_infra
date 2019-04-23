@@ -25,7 +25,7 @@ variable private_key_path {
   type = "string"
 }
 
-variable reddit_count {
-  type = "string"
-  default = "1"
+variable db_disk_image {
+  type    = "string"
+  default = "reddit-db"
 }
