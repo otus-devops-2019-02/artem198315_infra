@@ -1,20 +1,9 @@
-terraform {
-  required_version = "~> 0.11"
-}
-
-provider "google" {
-  //credentials = "${file("account.json")}"
-  project = "${var.project}"
-  region  = "${var.region}"
-}
-
-resource "google_compute_project_metadata_item" "ssh-keys" {
-  key   = "ssh-keys"
-  value = "shinta:${file("${var.public_key_path}")}appuser1:${file("${var.public_key_path}")}appuser2:${file("${var.public_key_path}")}"
+resource "google_compute_address" "reddit_ip" {
+  name = "ext-ip"
 }
 
 resource "google_compute_instance" "reddit" {
-  count = "${var.reddit_count}"
+  count        = "${var.reddit_count}"
   name         = "reddit-${count.index}"
   machine_type = "g1-small"
   zone         = "${var.zone}"
@@ -23,7 +12,7 @@ resource "google_compute_instance" "reddit" {
 
   boot_disk {
     initialize_params {
-      image = "${var.disk_image}"
+      image = "${var.app_disk_image}"
     }
   }
 
@@ -31,12 +20,12 @@ resource "google_compute_instance" "reddit" {
     network = "default"
 
     access_config {
-      // Ephemeral IP
+      nat_ip = "${google_compute_address.reddit_ip.address}"
     }
   }
 
   scheduling {
-    preemptible = true
+    preemptible       = true
     automatic_restart = false
   }
 
@@ -69,6 +58,5 @@ resource "google_compute_firewall" "firewall-puma" {
   }
 
   source_ranges = ["0.0.0.0/0"]
-
-  target_tags = ["reddit-app"]
+  target_tags   = ["reddit-app"]
 }

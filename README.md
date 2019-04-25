@@ -206,3 +206,41 @@ resource "google_compute_project_metadata_item" "ssh-keys" {
 
 Т.к используем лоадбалансер и каждый из инстансов reddit-app имеет свою собственную БД, то данные между инстансами не будут консистентны. Это следует учитывать
 
+
+# Домашнее задание 7
+
+## Описание конфигурации
+
+Backend terraform перенесен в gcs.
+Для его разворачивания используется terraform/storage-bucket.tf
+
+Реализованы две среды: prod и stage
+* terraform/prod
+* terraform/stage
+
+Каждая из них хранится в в своем bucket.
+
+Для более полного следования DRY отдельные файлы терраформ перенесены в модули.
+* modules/app  - приложение
+* modules/db - база
+* modules/vpc - фаервол для доступа по ssh к проекту. Заменяет стандартное правило default-allow-ssh
+
+При первом запуске можно добавить фаер в state (т.к он уже существует по умолчанию)
+```
+terraform import google_compute_firewall.firewall_ssh default-allow-ssh
+```
+
+**ssh-keys project-wide**. Задаются через terraform/<env>/project.tf
+
+Созданы через packer отдельные образы для app и bd (reddid-app и reddit-bd).
+* packer/app.json
+* packer/bd.json
+
+Mongodb уже запечена в образе reddit-db
+Приложение reddit деплоится в момент запуска инстанса с reddit-app.
+
+На reddit-app адрес mongodb задается в <env>/files/puma.service через
+```
+Environment=DATABASE_URL=reddit-db:27017
+```
+
