@@ -253,7 +253,7 @@ Environment=DATABASE_URL=reddit-db:27017
 При запуске после удаления клонированного репозитория, ансибле его не нашел и клонировал репозиторий заново (changed=1).
 
 Созданы inventory файлы в нескольких форматах:
-* inventory.ini
+* inventory
 * inventory.yaml
 * static_inventory.json
 * dynamic inventory
@@ -278,7 +278,5 @@ Environment=DATABASE_URL=reddit-db:27017
     "vars": {}
   }
 }
-
-
 ```
 
