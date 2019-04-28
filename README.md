@@ -243,7 +243,6 @@ Mongodb уже запечена в образе reddit-db
 ```
 Environment=DATABASE_URL=reddit-db:27017
 ```
-
 # Домашнее задание 8
 
 ## Описание конфигурации
@@ -280,7 +279,6 @@ Environment=DATABASE_URL=reddit-db:27017
 }
 ```
 
-
 # Домашнее задание 9
 
 ## Описание конфигурации
@@ -305,11 +303,4 @@ Playbooks:
 ```
 ansible-playbook site.yml -i gce.py
 ```
-
-
-
-
-
-
-
 
