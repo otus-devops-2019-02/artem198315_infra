@@ -7,4 +7,4 @@ packer/validate.*
 *.tfstate.backup
 *.tfvars
 .terraform/
-
+*.retry

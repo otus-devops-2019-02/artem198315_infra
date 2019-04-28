@@ -1,0 +1,16 @@
+---
+- name: deploy reddit-app
+  hosts: tag_reddit-app
+  become: true
+  tasks:
+    - name: Fetch latest app version
+      git:
+        repo: https://github.com/express42/reddit.git
+        dest: /opt/reddit
+        version: monolith
+
+    - name: Bundle install
+      bundler:
+        state: present
+        chdir: /opt/reddit
+
