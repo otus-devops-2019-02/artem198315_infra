@@ -304,3 +304,43 @@ Playbooks:
 ansible-playbook site.yml -i gce.py
 ```
 
+
+# Домашнее задание 10
+
+## Описание конфигурации
+
+Конфигурация ansible переведена на роли:
+- roles/app
+- roles/db
+
+playbooks перенесены в директорию ansible/playbooks
+
+Создано два окружения для provisioning через ansible:
+- ansible/envoronments/stage/
+- ansible/environments/prod/
+
+В каждом окружении свое inventory и свой group_vars.
+
+Запуск:
+```
+ansible-playbook playbooks/site.yml -i environments/stage/gce.py
+```
+
+Добавлен nginx из community role jdauphant.nginx.
+Приложение теперь доступно так же и на 80м порту.
+
+Заводятся дополнительные пользователи на хостах через playbook users.yml. 
+Данные хранятся в /environment/<env>/credentials.yml (зашифрован ansible-vault)
+
+vault_password_file лежит в $HOME/.ansible/vault.key
+
+
+
+
+
+
+
+
+
+
+
