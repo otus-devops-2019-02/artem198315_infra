@@ -243,8 +243,6 @@ Mongodb уже запечена в образе reddit-db
 ```
 Environment=DATABASE_URL=reddit-db:27017
 ```
-
-
 # Домашнее задание 8
 
 ## Описание конфигурации
@@ -279,5 +277,30 @@ Environment=DATABASE_URL=reddit-db:27017
     "vars": {}
   }
 }
+```
+
+# Домашнее задание 9
+
+## Описание конфигурации
+
+Dynamic inventory переведен на gcp.py
+
+Создано несколько вариантов playbook для конфигурации и деплоя:
+
+- site.yml (основной сценарий)
+ - app.yml
+ - db.yml
+ - deploy.yml
+- reddit_app_multiple_plays.yml
+- reddit_app_one_play.yml
+
+Provisioning при создании образов packer'ом переведен на ansible. 
+Playbooks:
+- ansible/packer_app.yml
+- ansible/packer_db.yml
+
+Запуск playbook для настройки инстансов:
+```
+ansible-playbook site.yml -i gce.py
 ```
 

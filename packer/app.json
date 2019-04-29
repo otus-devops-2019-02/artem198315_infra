@@ -33,9 +33,9 @@
     ],
     "provisioners": [
         {
-            "type": "shell",
-            "script": "scripts/install_ruby.sh",
-            "execute_command": "sudo {{.Path}}"
+            "type": "ansible",
+            "user": "{user `ssh_username`}",
+            "playbook_file": "ansible/packer_app.yml"
         }
     ]
 }
