@@ -8,3 +8,5 @@ packer/validate.*
 *.tfvars
 .terraform/
 *.retry
+
+jdauphant.nginx
