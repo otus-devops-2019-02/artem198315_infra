@@ -3,10 +3,5 @@
   debug:
     msg: "This host belongs to {{ env }} environment!!!"
 
-- name: Change mongodb config file
-  template:
-    src: mongod.conf.j2
-    dest: /etc/mongod.conf
-    mode: 0644
-  notify: restart mongod
-
+- include: install_mongo.yml
+- include: config_mongo.yml

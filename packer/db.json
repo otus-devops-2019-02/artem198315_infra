@@ -34,9 +34,13 @@
     "provisioners": [
         {
             "type": "ansible",
-            "user": "{{user `ssh_username`}}",
+            "user": "{{ user `ssh_username` }}",
+             "extra_arguments": [
+              "--tags=install"
+            ],
+            "ansible_env_vars": ["ANSIBLE_ROLES_PATH={{ pwd }}/ansible/roles"],
             "playbook_file": "ansible/packer_db.yml"
         }
-        
     ]
+
 }

@@ -6,8 +6,8 @@ After=network.target
 [Service]
 Type=simple
 Restart=always
-User=appuser
-EnvironmentFile=/home/appuser/db_config
+User={{ deploy_user }}
+EnvironmentFile=/home/{{ deploy_user }}/db_config
 WorkingDirectory=/opt/reddit
 ExecStart=/usr/local/bin/puma
 ExecStop=/bin/kill -TERM $MAINPID

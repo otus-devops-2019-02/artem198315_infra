@@ -2,15 +2,24 @@
 - name: deploy reddit-app
   hosts: tag_reddit-app
   become: true
+  vars:
+    deploy_user: appuser
+
   tasks:
     - name: Fetch latest app version
       git:
         repo: https://github.com/express42/reddit.git
         dest: /opt/reddit
         version: monolith
+      notify: restart puma
 
     - name: Bundle install
       bundler:
         state: present
         chdir: /opt/reddit
+
+  handlers:
+    - name: restart puma
+      become: true
+      service: name=puma state=restarted
 
