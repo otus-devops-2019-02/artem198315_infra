@@ -1,6 +1,8 @@
 # artem198315_infra
 artem198315 Infra repository
 
+[![Build Status](https://travis-ci.com/otus-devops-2019-02/artem198315_infra.svg?branch=master)](https://travis-ci.com/otus-devops-2019-02/artem198315_infra)
+
 
 # Домашнее задание 3
 
