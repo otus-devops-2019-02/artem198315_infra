@@ -4,7 +4,14 @@ artem198315 Infra repository
 [![Build Status](https://travis-ci.com/otus-devops-2019-02/artem198315_infra.svg?branch=master)](https://travis-ci.com/otus-devops-2019-02/artem198315_infra)
 
 
-# Домашнее задание 3
+# Домашнее задание 5
+
+Реализация двух вариантов подключения к internal хостам, развернутым в GCE
+
+- Создание бастион хоста
+- Создание vpn сервера 
+
+Используется gcloud для разворачивания хостов и provisioning
 
 ## Описание конфигурации
 
@@ -16,8 +23,8 @@ artem198315 Infra repository
 На хосте1 крутится vpn (pritunl)
 С хоста1 есть доступ до хоста2.
 
-Команды для gcloud
-
+Команды для gcloud:
+```
 gcloud compute addresses create bastion-ext \
 --region=europe-west3    \
 --network-tier=STANDARD
@@ -62,12 +69,12 @@ gcloud compute instances create someinternalhost \
 gcloud compute firewall-rules create \
 allow-pritunl --allow=udp:12510 --direction=ingress \
 --source-ranges=0.0.0.0/0 --target-tags=allow-pritunl
-
+```
 
 ### Подключение к internal хосту через jumphost(cloud-bastion) в одну команду
 
 ```
-ssh shinta@10.156.0.3 -J shinta@35.207.180.229
+ssh appuser@10.156.0.3 -J appuser@35.207.180.229
 ```
 
 ### SSH алиасы для подключения к бастион хосту и internal
@@ -75,16 +82,16 @@ ssh shinta@10.156.0.3 -J shinta@35.207.180.229
 ~/.ssh/config
 HOST bastion
 HostName 35.207.180.229
-User shinta
+User appuser
 
 HOST ginternal
 HostName 10.156.0.3
 ProxyJump bastion
-User shinta
+User appuser
 
 HOST ginternal_v2
 HostName 10.156.0.3
-User shinta
+User appuser
 ProxyCommand ssh bastion nc %h %p
 ```
 
@@ -100,7 +107,10 @@ someinternalhost_IP = 10.156.0.3
 ```
 
 
-# Домашнее задание 4
+# Домашнее задание 6
+
+Деплой тестововго приложения в GCE с использованием shell скриптов для provision
+
 
 ## Описание конфигурации
 
@@ -148,7 +158,9 @@ testapp_port = 9292
 ```
 
 
-# Домашнее задание 5
+# Домашнее задание 7
+
+Создание образов VM при помощи packer
 
 ## Описание конфигурации
 
@@ -181,7 +193,9 @@ testapp_port = 9292
 Скрипт для создания вм в gcc из full образа
 
 
-# Домашнее задание 6
+# Домашнее задание 8
+
+Использование terraform для разворачивания инфраструктуры в GCE
 
 ## Описание конфигурации
 
@@ -209,7 +223,10 @@ resource "google_compute_project_metadata_item" "ssh-keys" {
 Т.к используем лоадбалансер и каждый из инстансов reddit-app имеет свою собственную БД, то данные между инстансами не будут консистентны. Это следует учитывать
 
 
-# Домашнее задание 7
+# Домашнее задание 9
+
+Создание Terraform модулей для управления компонентами инфраструктуры.
+Описание и настройка инфраструктуры нескольких окружений. Работа с Terraform remote backend.
 
 ## Описание конфигурации
 
@@ -245,11 +262,17 @@ Mongodb уже запечена в образе reddit-db
 ```
 Environment=DATABASE_URL=reddit-db:27017
 ```
-# Домашнее задание 8
+
+
+# Домашнее задание 10
+
+Написание Ansible плейбуков на основе имеющихся bash скриптов.
+Сборка базовых образов при помощи Packer и Ansible.
+Работа с inventory
 
 ## Описание конфигурации
 
-СОгласно заданию при первом запуске playbook clone.yml уже существовал клонированный репозиторий.
+Согласно заданию при первом запуске playbook clone.yml уже существовал клонированный репозиторий.
 Поэтому ansible не выполнил никаких изменений (changed=0).
 При запуске после удаления клонированного репозитория, ансибле его не нашел и клонировал репозиторий заново (changed=1).
 
@@ -281,7 +304,9 @@ Environment=DATABASE_URL=reddit-db:27017
 }
 ```
 
-# Домашнее задание 9
+# Домашнее задание 11
+
+Управление настройками хостов и деплой приложения при помощи Ansible.
 
 ## Описание конфигурации
 
@@ -307,7 +332,10 @@ ansible-playbook site.yml -i gce.py
 ```
 
 
-# Домашнее задание 10
+# Домашнее задание 12
+
+Написание Ansible ролей для управления конфигурацией сервисов и настройками хостов.
+Организация репозитория для работы с несколькими окружениями. Работа с Ansible Galaxy и комьюнити ролями.
 
 ## Описание конфигурации
 
@@ -338,17 +366,21 @@ vault_password_file лежит в $HOME/.ansible/vault.key
 
 # Домашнее задание 13
 
+Доработка имеющихся ролей локально с использование Vagrant.
+Тестирование конфигурации при помощи Molecule и TestInfra.
+СОздание собственого репозитория для роли db
+
 ## Описание конфигурации
 
 Разворачиваем окружение в vagrant и производим тестирование
 
-Настройки vagrant в ansible/Vagrantfile
+Настройки vagrant в ansible/Vagrantfile.
 
 Для провисионинга используется ansible playbook ansible/site.yml
 
 Для переменные окружения для ansible и настройки для playbook задаются в Vagrantfile (в том числе для роли nginx)
 
-Тесты роли db с использованием molecule и testinfra
+Тесты роли db с использованием molecule и testinfra.
 
 cd roles/db && molecule init scenario --scenario-name default -r db -d vagrant
 
@@ -404,13 +436,13 @@ git push
 ```
 
 
-.travis-ci.yml
+.travis.yml
 ```
 language: python
 python:
 - '3.6'
 install:
-- pip install ansible==2.3.0 molecule apache-libcloud
+- pip install ansible==2.6.4 molecule apache-libcloud
 env:
   matrix:
   - GCE_CREDENTIALS_FILE="$(pwd)/credentials.json"
