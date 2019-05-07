@@ -4,4 +4,4 @@
     msg: "This host belongs to {{ env }} environment!!!"
 
 - include: ruby.yml
-- include: puma.yml 
+- include: puma.yml

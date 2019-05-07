@@ -1,3 +1,4 @@
+---
 - name: Add APT key
   apt_key:
     id: EA312927
@@ -21,4 +22,3 @@
     name: mongod
     enabled: yes
   tags: install
-

@@ -8,4 +8,3 @@
     - name: install python
       raw: test -e /usr/bin/python || (apt update -y && apt install python -y)
       changed_when: False
-  
