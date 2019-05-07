@@ -1,0 +1,10 @@
+---
+- name: Install ruby and rubygems and required packages
+  become: True
+  apt:
+    name:
+      - ruby-full
+      - ruby-bundler
+      - build-essential
+    state: present
+  tags: ruby

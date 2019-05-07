@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/artem198315/mongodb.svg?branch=master)](https://travis-ci.com/artem198315/mongodb)
+
 Role Name
 =========
 
